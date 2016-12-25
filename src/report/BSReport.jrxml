@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="820a517c-e886-4825-b36d-4e058df8cec7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MonthYear" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select s.staff_id , s.staff_name,r.destination,count(t.ticket_id) AS Total_Ticket,sum(p.price) AS Total_Amount
+from staff s,route r, ticket t, schedule sc,booking b,price p
+where s.staff_id = b.staff_id AND b.booking_id = t.booking_id AND t.schedule_id = sc.schedule_id AND 
+sc.route_id = r.route_id AND r.price_id=p.price_id AND substr (b.booking_date, 1, 7) = $P{MonthYear}
+group by  s.staff_id , s.staff_name,r.destination]]>
+	</queryString>
+	<field name="STAFF_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="STAFF_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DESTINATION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTAL_TICKET" class="java.lang.Integer"/>
+	<field name="TOTAL_AMOUNT" class="java.math.BigDecimal"/>
+	<variable name="SubTotalTC" class="java.lang.Integer" resetType="Group" resetGroup="STAFF" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_TICKET}]]></variableExpression>
+	</variable>
+	<variable name="SubTotalAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="STAFF" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_AMOUNT}]]></variableExpression>
+	</variable>
+	<group name="STAFF">
+		<groupExpression><![CDATA[$F{STAFF_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="26">
+				<textField>
+					<reportElement x="110" y="6" width="100" height="20" uuid="dc1992ed-ef48-4299-8746-8b68449882be"/>
+					<textFieldExpression><![CDATA[$F{STAFF_NAME}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="6" width="100" height="20" uuid="f3794f37-bd63-4aa8-ae86-660d20bae06a"/>
+					<textFieldExpression><![CDATA[$F{STAFF_ID}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="25" width="210" height="1" uuid="c984feac-555c-4296-a950-f699db3ff69b"/>
+					<graphicElement>
+						<pen lineStyle="Dashed"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="26">
+				<line>
+					<reportElement x="0" y="1" width="555" height="1" uuid="a53bc6dd-126a-4da4-ad1b-089a6ba5b102"/>
+				</line>
+				<textField>
+					<reportElement x="337" y="6" width="98" height="20" uuid="1d493d63-7e5e-4cd1-a7e0-962d758387e3"/>
+					<textElement textAlignment="Right">
+						<font isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SubTotalTC}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="220" y="6" width="100" height="20" uuid="ea847e7a-af30-4c2e-bdd7-fff461fbfbd7"/>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<line>
+					<reportElement x="1" y="25" width="554" height="1" uuid="837ae562-a4cc-4c32-9e30-f0fa0bb950b6"/>
+				</line>
+				<textField pattern="###0.00">
+					<reportElement x="455" y="6" width="86" height="20" uuid="5bcb384e-4efc-443b-8571-51ec348539f5"/>
+					<textElement textAlignment="Right">
+						<font isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SubTotalAmount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="390" height="79" uuid="c2190b31-b8f8-4fe6-9eb3-5c6ca3c6c841"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Fax" size="18" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Staff Booking Summary Report On ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="10" width="270" height="20" uuid="abd65b11-3bb9-4238-952f-52080a84e153"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Fax" size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CJH Bus Express Sdn. Bhd.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="398" y="0" width="143" height="79" uuid="18a99aad-bdab-47e5-8cd5-f06bbfea061c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Lucida Fax" size="18" isBold="true" isItalic="false" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MonthYear}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4e48c3f9-8c86-449d-96f6-83d9998cbcf2"/>
+				<text><![CDATA[STAFF_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="100" height="20" uuid="eef87ed0-add7-4f3f-9287-b8c3ceda0d4d"/>
+				<text><![CDATA[STAFF_NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="100" height="20" uuid="9490f67d-af49-49f3-9185-ce2023300300"/>
+				<text><![CDATA[DESTINATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="1" width="100" height="20" uuid="978ffb28-58e6-4b3d-8118-f176e753fd85"/>
+				<text><![CDATA[TOTAL_TICKET]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="20" width="555" height="1" uuid="249766e8-5d59-49b4-bdae-fb55a897f18f"/>
+			</line>
+			<staticText>
+				<reportElement x="469" y="0" width="100" height="20" uuid="f2e8806f-eaa5-421f-9f2d-6ba72e7cd4bf"/>
+				<text><![CDATA[TOTAL_AMOUNT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="0" width="100" height="20" uuid="d78fa95c-dbdb-4b37-a4fb-d11f2c0a9551"/>
+				<textFieldExpression><![CDATA[$F{DESTINATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="0" width="98" height="20" uuid="d88f8c32-55e7-4c79-b7a0-33a3e1599c24"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL_TICKET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="86" height="20" uuid="f5d5d941-f517-40d6-8ec2-5a921c2cf393"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL_AMOUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="22" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="1" y="0" width="100" height="20" uuid="fcae253d-1202-42aa-81cf-9c4f76fc2d23"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="80" height="20" uuid="fdc2ddc0-7ff2-4899-be85-0772ac6e9e5b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="315" y="0" width="40" height="20" uuid="605c0bbf-8139-4832-a0b7-6364ed65d40b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="455" y="0" width="100" height="20" uuid="48749cd2-181f-43b8-8289-233de3b0bc14"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="550" splitType="Stretch">
+			<staticText>
+				<reportElement x="22" y="226" width="504" height="20" uuid="c180479e-bd06-489a-b6e8-fe5349ac6307"/>
+				<textElement textAlignment="Center">
+					<font isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Diagram 1.1 Total Ticket Barchart]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="473" width="504" height="20" uuid="e81c60af-2a51-4a9f-afc3-592dae8d9fc5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Diagram 1.2 Total Amount Barchart]]></text>
+			</staticText>
+			<barChart>
+				<chart>
+					<reportElement x="22" y="12" width="504" height="214" uuid="a44a1028-0e2c-487c-b84a-350485484437"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{DESTINATION}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{STAFF_ID}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{TOTAL_TICKET}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<barChart>
+				<chart>
+					<reportElement x="22" y="259" width="504" height="214" uuid="89132941-1f5b-44e5-a764-141cb8d61f20"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{DESTINATION}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{STAFF_ID}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{TOTAL_AMOUNT}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

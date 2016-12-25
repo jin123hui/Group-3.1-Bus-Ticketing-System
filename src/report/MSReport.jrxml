@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ddab9d7-b52a-46a7-9d47-76d6c2149a15">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MonthYear" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select r.destination, count(t.ticket_id) AS Total_No_of_Ticket, sum(p.price) AS Total_Sales
+from booking b, ticket t, schedule s, route r, price p
+where b.booking_id = t.booking_id AND t.schedule_ID = s.schedule_ID AND s.route_ID = r.route_ID AND r.price_ID = p.Price_ID
+group by r.destination]]>
+	</queryString>
+	<field name="DESTINATION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TOTAL_NO_OF_TICKET" class="java.lang.Integer"/>
+	<field name="TOTAL_SALES" class="java.math.BigDecimal"/>
+	<variable name="GrandTotal" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_SALES}]]></variableExpression>
+	</variable>
+	<variable name="GrandTotalTC" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL_NO_OF_TICKET}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="153" y="0" width="270" height="20" uuid="68c8eb27-b4b6-477b-8257-fb71ef2626c5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Fax" size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CJH Bus Express Sdn. Bhd.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="33" y="0" width="390" height="79" uuid="063247f2-917e-4544-b5d2-7a25d54cb5c3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Fax" size="18" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Bus Schedule Summary Report On  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="389" y="0" width="143" height="79" uuid="081d73c3-abb8-4d2c-81e4-558f742a7e6b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Lucida Fax" size="18" isBold="true" isItalic="false" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{MonthYear}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="81" y="0" width="100" height="20" uuid="0d251666-c5fd-4178-b2f3-b5154e9413e2"/>
+				<text><![CDATA[DESTINATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="0" width="100" height="20" uuid="d5a2bb26-f971-4b3d-a71e-70a2a48a9f2f"/>
+				<text><![CDATA[TOTAL_NO_OF_TICKET]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="0" width="100" height="20" uuid="57d80f87-75a6-4ae4-b81c-6df116ff0607"/>
+				<text><![CDATA[TOTAL_SALES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="50" y="20" width="418" height="1" uuid="c82cfc78-fa3f-4836-91cd-e8dcb84b8ac7"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="81" y="0" width="100" height="20" uuid="721c5e7e-2262-4b7e-ae6e-d9f126b2f855"/>
+				<textFieldExpression><![CDATA[$F{DESTINATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="204" y="0" width="100" height="20" uuid="820ea97d-3548-47bd-b39e-10a66ca55836"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL_NO_OF_TICKET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="100" height="20" uuid="877c56f3-0675-4d3f-99b6-21b9bbbb73e6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL_SALES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="24" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="42" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="314" y="0" width="40" height="20" uuid="57b88682-a9c5-4470-a901-1a9caf49fcda"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="0" width="80" height="20" uuid="6702717c-f2a8-4807-ba00-a2522ba23218"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="454" y="0" width="100" height="20" uuid="fd29c363-51c1-4fb8-ad75-c75be8483b65"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="0" y="0" width="100" height="20" uuid="94b5cb48-a848-406e-9c9f-88fd4bd8aba2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="538" splitType="Stretch">
+			<line>
+				<reportElement x="50" y="0" width="418" height="1" uuid="c9141841-6188-4299-8c31-14dd9279ecaf"/>
+			</line>
+			<pie3DChart>
+				<chart>
+					<reportElement x="95" y="34" width="345" height="212" uuid="d0c41290-6e3e-47a2-8dcb-5892e933168a"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{DESTINATION}]]></keyExpression>
+					<valueExpression><![CDATA[$F{TOTAL_SALES}]]></valueExpression>
+				</pieDataset>
+				<pie3DPlot labelFormat="{0}({2})({1})" legendLabelFormat="{0}">
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+			<staticText>
+				<reportElement x="181" y="246" width="208" height="20" uuid="88cb3bd8-7277-4180-9edf-3f5cabeb93c1"/>
+				<text><![CDATA[Diagram 1.1: Total Sales PieChart]]></text>
+			</staticText>
+			<pie3DChart>
+				<chart>
+					<reportElement x="95" y="293" width="345" height="212" uuid="ce664f77-7983-4cff-bef0-b8ad68bb4a5c"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{DESTINATION}]]></keyExpression>
+					<valueExpression><![CDATA[$F{TOTAL_NO_OF_TICKET}]]></valueExpression>
+				</pieDataset>
+				<pie3DPlot labelFormat="{0}({2})({1})" legendLabelFormat="{0}">
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+			<staticText>
+				<reportElement x="181" y="505" width="208" height="20" uuid="f681b616-bbf2-4f8a-a7d2-cc0ecd745bbb"/>
+				<text><![CDATA[Diagram 1.1: Total No of Ticket PieChart]]></text>
+			</staticText>
+			<textField pattern="###0.00">
+				<reportElement x="367" y="0" width="100" height="20" uuid="8f587e3b-9df9-430a-9972-6f5db2309cd5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{GrandTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="214" y="0" width="100" height="20" uuid="fb79977a-160f-40b3-982f-70cea2d48978"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{GrandTotalTC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="81" y="1" width="100" height="20" uuid="fc105663-0c8a-4355-b9ad-cb97f52c5d27"/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
