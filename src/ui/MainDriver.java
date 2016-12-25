@@ -708,7 +708,7 @@ public class MainDriver extends JFrame {
             menuPanel.repaint();
             menuPanel.add(editMyInfoPanel());
         });
-        
+/        
         jbtMain.addActionListener((ActionEvent e) -> {
             this.countList.clear();
             this.ticketList.clear();
@@ -746,7 +746,7 @@ public class MainDriver extends JFrame {
             menuPanel.removeAll();
             menuPanel.revalidate();
             menuPanel.repaint();
-            menuPanel.add(new ReportPanel(), BorderLayout.CENTER);
+            //menuPanel.add(new ReportPanel(), BorderLayout.CENTER);
         });
         
         jbtLogout.addActionListener((ActionEvent e) -> {
