@@ -708,7 +708,7 @@ public class MainDriver extends JFrame {
             menuPanel.repaint();
             menuPanel.add(editMyInfoPanel());
         });
-/        
+        
         jbtMain.addActionListener((ActionEvent e) -> {
             this.countList.clear();
             this.ticketList.clear();
